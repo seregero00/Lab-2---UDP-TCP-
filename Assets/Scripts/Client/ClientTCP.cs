@@ -13,6 +13,9 @@ public class ClientTCP : MonoBehaviour
     string clientText;
     Socket server;
 
+    public TMP_InputField ipInputField;
+    string serverIP;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,8 +32,28 @@ public class ClientTCP : MonoBehaviour
 
     public void StartClient()
     {
-        Thread connect = new Thread(Connect);
-        connect.Start();
+        serverIP = ipInputField.text;
+
+        if (IsValidIP(serverIP))
+        {
+
+            // Si la IP es válida, mostrar el mensaje "IP correcta" en la UI
+            clientText = "IP correcta";
+
+            // Continuar con el inicio del cliente
+            IPEndPoint ipep = new IPEndPoint(IPAddress.Parse(serverIP), 9050);
+            server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+
+            Thread mainThread = new Thread(Connect);
+            mainThread.Start();
+        }
+        else
+        {
+            clientText += "\nIP no válida.";
+        }
+
+
     }
     void Connect()
     {
@@ -41,7 +64,7 @@ public class ClientTCP : MonoBehaviour
         //When calling connect and succeeding, our server socket will create a
         //connection between this endpoint and the server's endpoint
 
-        IPEndPoint ipep = new IPEndPoint(IPAddress.Parse("192.168.0.17"), 9050); //Poner aqui tu IP
+        IPEndPoint ipep = new IPEndPoint(IPAddress.Parse(serverIP), 9050); //Poner aqui tu IP
         server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         server.Connect(ipep);
 
@@ -91,6 +114,11 @@ public class ClientTCP : MonoBehaviour
 
         }
 
+    }
+    bool IsValidIP(string ip)
+    {
+        IPAddress ipAddr;
+        return IPAddress.TryParse(ip, out ipAddr);
     }
 
 }

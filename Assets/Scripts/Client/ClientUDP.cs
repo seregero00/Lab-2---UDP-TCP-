@@ -4,6 +4,7 @@ using System.Text;
 using UnityEngine;
 using System.Threading;
 using TMPro;
+using UnityEngine.Windows;
 
 public class ClientUDP : MonoBehaviour
 {
@@ -11,6 +12,12 @@ public class ClientUDP : MonoBehaviour
     public GameObject UItextObj;
     TextMeshProUGUI UItext;
     string clientText;
+
+    
+    public TMP_InputField ipInputField;
+    public TMP_InputField userNameInputField;
+    string serverIP;
+
 
     // Start is called before the first frame update
     void Start()
@@ -20,8 +27,23 @@ public class ClientUDP : MonoBehaviour
     }
     public void StartClient()
     {
-        Thread mainThread = new Thread(Send);
-        mainThread.Start();
+        serverIP = ipInputField.text;
+
+        if (IsValidIP(serverIP)){//IP es correcta?
+
+            clientText = "IP correcta";
+
+            IPEndPoint ipep = new IPEndPoint(IPAddress.Parse(serverIP), 9050);
+            socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+
+
+            Thread mainThread = new Thread(Send);
+            mainThread.Start();
+        }
+        else
+        {
+            clientText += "\nIP no válida.";
+        }
     }
 
     void Update()
@@ -36,7 +58,8 @@ public class ClientUDP : MonoBehaviour
         //we are going to send a message to establish our communication so we need an endpoint
         //We need the server's IP and the port we've binded it to before
         //Again, initialize the socket
-        IPEndPoint ipep = new IPEndPoint(IPAddress.Parse("192.168.0.17"), 9050);//Poner aqui tu IP
+        //IPEndPoint ipep = new IPEndPoint(IPAddress.Parse("192.168.0.17"), 9050);//Poner aqui tu IP
+        IPEndPoint ipep = new IPEndPoint(IPAddress.Parse(serverIP), 9050);//Poner aqui tu IP
 
         socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
@@ -46,9 +69,8 @@ public class ClientUDP : MonoBehaviour
         //This time, our UDP socket doesn't have it, so we have to pass it
         //as a parameter on it's SendTo() method
 
-        string handshake = "Hello World";
-        //byte[] data = new byte[1024];
-        byte[] data = Encoding.ASCII.GetBytes(handshake);
+        string username = userNameInputField.text ;
+        byte[] data = Encoding.ASCII.GetBytes(username);
 
         socket.SendTo(data, data.Length, SocketFlags.None, ipep);
 
@@ -83,5 +105,11 @@ public class ClientUDP : MonoBehaviour
 
     }
 
+    bool IsValidIP(string ip)
+    {
+        IPAddress ipAddr;
+        return IPAddress.TryParse(ip, out ipAddr);
+    }
 }
+
 
