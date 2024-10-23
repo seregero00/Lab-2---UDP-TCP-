@@ -14,6 +14,7 @@ public class ClientTCP : MonoBehaviour
     Socket server;
 
     public TMP_InputField ipInputField;
+    public TMP_InputField userNameInputField;
     string serverIP;
 
     // Start is called before the first frame update
@@ -85,7 +86,8 @@ public class ClientTCP : MonoBehaviour
         //TO DO 4
         //Using the socket that stores the connection between the 2 endpoints, call the TCP send function with
         //an encoded message
-        string message = "Hello from client!";
+        string username = userNameInputField.text;
+        string message = "User connected: " + username;
         byte[] msg = Encoding.ASCII.GetBytes(message);
         server.Send(msg);
 
@@ -108,7 +110,7 @@ public class ClientTCP : MonoBehaviour
             else
             {
                 string receivedMessage = Encoding.ASCII.GetString(data, 0, recv);
-                clientText += "\nReceived: " + receivedMessage;
+                clientText += "\nReceived from server: " + receivedMessage;
             }
 
 

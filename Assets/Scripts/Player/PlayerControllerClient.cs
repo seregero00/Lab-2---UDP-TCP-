@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+
 
 public class PlayerControllerClient : MonoBehaviour
 {
@@ -13,6 +15,8 @@ public class PlayerControllerClient : MonoBehaviour
     private bool nearUDP = false;
     private bool nearTCP = false;
 
+    public TMP_InputField udpInputField;
+    public TMP_InputField tcpInputField;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +26,11 @@ public class PlayerControllerClient : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if ((udpInputField != null && udpInputField.isFocused) ||
+        (tcpInputField != null && tcpInputField.isFocused))
+        {
+            return; // Si alguno de los InputFields tiene el foco, no ejecuta el resto del código
+        }
         Vector3 speed = new Vector3(0, 0, 0);
         if (Input.GetKey("d"))
         {

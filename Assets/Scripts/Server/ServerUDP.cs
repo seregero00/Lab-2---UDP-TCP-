@@ -14,6 +14,9 @@ public class ServerUDP : MonoBehaviour
     TextMeshProUGUI UItext;
     string serverText;
 
+    string serverName = "ServidorUDP";
+
+
     void Start()
     {
         UItext = UItextObj.GetComponent<TextMeshProUGUI>();
@@ -81,21 +84,21 @@ public class ServerUDP : MonoBehaviour
             //When our UDP server receives a message from a random remote, it has to send a ping,
             //Call a send thread
 
-            Thread sendThread = new Thread(() => Send(Remote));
+            Thread sendThread = new Thread(() => Send(Remote,serverName));
             sendThread.Start();
         }
 
     }
 
-    void Send(EndPoint Remote)
+    void Send(EndPoint Remote,string message)
     {
         //TO DO 4
         //Use socket.SendTo to send a ping using the remote we stored earlier.
         //byte[] data = new byte[1024];
         //string welcome = "Ping";
 
-        string response = "Ping";
-        byte[] msg = Encoding.ASCII.GetBytes(response);
+        //string response = "Ping";
+        byte[] msg = Encoding.ASCII.GetBytes(message);
 
         // Enviar el mensaje de respuesta al cliente
         socket.SendTo(msg, msg.Length, SocketFlags.None, Remote);

@@ -74,6 +74,7 @@ public class ClientUDP : MonoBehaviour
 
         socket.SendTo(data, data.Length, SocketFlags.None, ipep);
 
+        clientText += $"\nUsername '{username}' sent to the server.";
 
         //TO DO 5
         //We'll wait for a server response,
@@ -98,6 +99,11 @@ public class ClientUDP : MonoBehaviour
 
             string message = Encoding.ASCII.GetString(data, 0, recv);
             clientText += "\nReceived from server: " + message; // Almacenar el mensaje recibido
+
+            if (message == "MiServidorUDP")
+            {
+                clientText += "\nConnected to server: " + message;
+            }
 
         }
         //clientText = ("Message received from {0}: " + Remote.ToString());

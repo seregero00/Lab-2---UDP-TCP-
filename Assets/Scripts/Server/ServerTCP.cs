@@ -14,6 +14,7 @@ public class ServerTCP : MonoBehaviour
     TextMeshProUGUI UItext;
     string serverText;
 
+    string serverName = "ServidorTCP";
     public struct User
     {
         public string name;
@@ -23,6 +24,7 @@ public class ServerTCP : MonoBehaviour
     void Start()
     {
         UItext = UItextObj.GetComponent<TextMeshProUGUI>();
+
 
     }
 
@@ -102,13 +104,14 @@ public class ServerTCP : MonoBehaviour
                 break;
             else
             {
-                serverText = serverText + "\n" + Encoding.ASCII.GetString(data, 0, recv);
+                string message = Encoding.ASCII.GetString(data, 0, recv);
+                serverText += "\n" + message;
             }
 
             //TO DO 6
             //We'll send a ping back every time a message is received
             //Start another thread to send a message, same parameters as this one.
-            Thread answer = new Thread(() => Send(user));
+            Thread answer = new Thread(() => Send(user,serverName));
             answer.Start();
         }
     }
@@ -116,9 +119,8 @@ public class ServerTCP : MonoBehaviour
     //TO DO 6
     //Now, we'll use this user socket to send a "ping".
     //Just call the socket's send function and encode the string.
-    void Send(User user)
+    void Send(User user, string message)
     {
-        string message = "ping";
         byte[] msg = Encoding.ASCII.GetBytes(message);
         user.socket.Send(msg);
     }
