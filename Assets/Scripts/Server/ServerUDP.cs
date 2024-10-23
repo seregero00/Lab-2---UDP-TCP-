@@ -4,8 +4,6 @@ using System.Text;
 using UnityEngine;
 using System.Threading;
 using TMPro;
-//using UnityEngine.tvOS;
-
 public class ServerUDP : MonoBehaviour
 {
     Socket socket;
@@ -62,6 +60,7 @@ public class ServerUDP : MonoBehaviour
         //TO DO 3
         //We don't know who may be comunicating with this server, so we have to create an
         //endpoint with any address and an IpEndpoint from it to reply to it later.
+
         IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
         EndPoint Remote = (EndPoint)(sender);
 
@@ -77,9 +76,6 @@ public class ServerUDP : MonoBehaviour
             string message = Encoding.ASCII.GetString(data, 0, recv);
             serverText += "\nMessage received from " + Remote.ToString() + ": " + message;
 
-            //serverText = serverText + "\n" + "Message received from {0}:" + Remote.ToString();
-            //serverText = serverText + "\n" + Encoding.ASCII.GetString(data, 0, recv);
-
             //TO DO 4
             //When our UDP server receives a message from a random remote, it has to send a ping,
             //Call a send thread
@@ -94,13 +90,9 @@ public class ServerUDP : MonoBehaviour
     {
         //TO DO 4
         //Use socket.SendTo to send a ping using the remote we stored earlier.
-        //byte[] data = new byte[1024];
-        //string welcome = "Ping";
 
-        //string response = "Ping";
         byte[] msg = Encoding.ASCII.GetBytes(message);
 
-        // Enviar el mensaje de respuesta al cliente
         socket.SendTo(msg, msg.Length, SocketFlags.None, Remote);
 
     }

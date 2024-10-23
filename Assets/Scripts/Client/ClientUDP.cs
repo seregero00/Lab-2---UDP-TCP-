@@ -58,8 +58,8 @@ public class ClientUDP : MonoBehaviour
         //we are going to send a message to establish our communication so we need an endpoint
         //We need the server's IP and the port we've binded it to before
         //Again, initialize the socket
-        //IPEndPoint ipep = new IPEndPoint(IPAddress.Parse("192.168.0.17"), 9050);//Poner aqui tu IP
-        IPEndPoint ipep = new IPEndPoint(IPAddress.Parse(serverIP), 9050);//Poner aqui tu IP
+
+        IPEndPoint ipep = new IPEndPoint(IPAddress.Parse(serverIP), 9050);
 
         socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
@@ -79,6 +79,7 @@ public class ClientUDP : MonoBehaviour
         //TO DO 5
         //We'll wait for a server response,
         //so you can already start the receive thread
+
         Thread receive = new Thread(Receive);
         receive.Start();
 
@@ -98,7 +99,7 @@ public class ClientUDP : MonoBehaviour
             int recv = socket.ReceiveFrom(data, ref Remote);
 
             string message = Encoding.ASCII.GetString(data, 0, recv);
-            clientText += "\nReceived from server: " + message; // Almacenar el mensaje recibido
+            clientText += "\nReceived from server: " + message;
 
             if (message == "MiServidorUDP")
             {
@@ -106,9 +107,6 @@ public class ClientUDP : MonoBehaviour
             }
 
         }
-        //clientText = ("Message received from {0}: " + Remote.ToString());
-        //clientText = clientText += "\n" + Encoding.ASCII.GetString(data, 0, recv);
-
     }
 
     bool IsValidIP(string ip)

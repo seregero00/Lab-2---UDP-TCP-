@@ -38,10 +38,8 @@ public class ClientTCP : MonoBehaviour
         if (IsValidIP(serverIP))
         {
 
-            // Si la IP es válida, mostrar el mensaje "IP correcta" en la UI
             clientText = "IP correcta";
 
-            // Continuar con el inicio del cliente
             IPEndPoint ipep = new IPEndPoint(IPAddress.Parse(serverIP), 9050);
             server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
@@ -86,6 +84,7 @@ public class ClientTCP : MonoBehaviour
         //TO DO 4
         //Using the socket that stores the connection between the 2 endpoints, call the TCP send function with
         //an encoded message
+
         string username = userNameInputField.text;
         string message = "User connected: " + username;
         byte[] msg = Encoding.ASCII.GetBytes(message);
